@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5530AD1C-371E-49CD-ADEA-4CBB94D2FCD0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeSpace.BackendServer", "src\KnowledgeSpace.BackendServer\KnowledgeSpace.BackendServer.csproj", "{D275B1D3-8900-47A6-A379-1E81F71E1E1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeSpace.WebPortal", "src\KnowledgeSpace.WebPortal\KnowledgeSpace.WebPortal.csproj", "{191F156D-B7F6-4A17-97EE-17330CD51974}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeSpace.Shared", "src\KnowledgeSpace.Shared\KnowledgeSpace.Shared.csproj", "{605B43E2-F984-43DE-B7B2-91BDC7E79318}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeSpace.Persistence", "src\KnowledgeSpace.Data\KnowledgeSpace.Persistence.csproj", "{18DDCBB6-758F-4836-8EDA-55C36C38B59A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,13 +29,12 @@ Global
 		{605B43E2-F984-43DE-B7B2-91BDC7E79318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{605B43E2-F984-43DE-B7B2-91BDC7E79318}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{605B43E2-F984-43DE-B7B2-91BDC7E79318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DDCBB6-758F-4836-8EDA-55C36C38B59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DDCBB6-758F-4836-8EDA-55C36C38B59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DDCBB6-758F-4836-8EDA-55C36C38B59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DDCBB6-758F-4836-8EDA-55C36C38B59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D275B1D3-8900-47A6-A379-1E81F71E1E1F} = {5530AD1C-371E-49CD-ADEA-4CBB94D2FCD0}
-		{191F156D-B7F6-4A17-97EE-17330CD51974} = {5530AD1C-371E-49CD-ADEA-4CBB94D2FCD0}
-		{605B43E2-F984-43DE-B7B2-91BDC7E79318} = {5530AD1C-371E-49CD-ADEA-4CBB94D2FCD0}
 	EndGlobalSection
 EndGlobal
