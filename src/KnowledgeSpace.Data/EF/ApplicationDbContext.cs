@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection.Emit;
+using KnowledgeSpace.Persistence.Extentions;
 
 namespace KnowledgeSpace.Persistence.EF
 {
@@ -37,6 +39,7 @@ namespace KnowledgeSpace.Persistence.EF
                        .HasKey(c => new { c.CommandId, c.FunctionId });
 
             builder.HasSequence("KnowledgeBaseSequence");
+
         }
 
         public DbSet<Command> Commands { set; get; }
@@ -46,7 +49,7 @@ namespace KnowledgeSpace.Persistence.EF
         public DbSet<Comment> Comments { set; get; }
         public DbSet<Function> Functions { set; get; }
         public DbSet<KnowledgeBase> KnowledgeBases { set; get; }
-        public DbSet<Label> Labels { set; get; }
+        public DbSet<Entities.Label> Labels { set; get; }
         public DbSet<LabelInKnowledgeBase> LabelInKnowledgeBases { set; get; }
         public DbSet<Permission> Permissions { set; get; }
         public DbSet<Report> Reports { set; get; }
