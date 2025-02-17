@@ -66,7 +66,7 @@ namespace KnowledgeSpace.Persistence.Extentions
                         UserName = "admin",
                         FirstName = "Quản trị",
                         LastName = "1",
-                        Email = "tedu.international@gmail.com",
+                        Email = "admin@gmail.com",
                         LockoutEnabled = false
                     }, "Admin@123");
                     if (result.Succeeded)

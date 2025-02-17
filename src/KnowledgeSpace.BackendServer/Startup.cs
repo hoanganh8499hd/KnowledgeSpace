@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KnowledgeSpace.BackendServer.IdentityServer;
+using KnowledgeSpace.BackendServer.Services;
 using KnowledgeSpace.Persistence.EF;
 using KnowledgeSpace.Persistence.Entities;
 using KnowledgeSpace.Persistence.Extentions;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -55,9 +58,53 @@ namespace KnowledgeSpace.BackendServer
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddControllers();
+
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+            .AddInMemoryApiResources(Config.Apis)
+            .AddInMemoryClients(Config.Clients)
+            .AddInMemoryIdentityResources(Config.Ids)
+            .AddAspNetIdentity<User>()
+            .AddDeveloperSigningCredential();
+
+            services.AddControllersWithViews();
+
+            services.AddAuthentication()
+              .AddLocalApi("Bearer", option =>
+              {
+                  option.ExpectedScope = "api.knowledgespace";
+              });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Bearer", policy =>
+                {
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
+                });
+            });
+
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AddAreaFolderRouteModelConvention("Identity", "/Account/", model =>
+                {
+                    foreach (var selector in model.Selectors)
+                    {
+                        var attributeRouteModel = selector.AttributeRouteModel;
+                        attributeRouteModel.Order = -1;
+                        attributeRouteModel.Template = attributeRouteModel.Template.Remove(0, "Identity".Length);
+                    }
+                });
+            });
 
             services.AddTransient<DbInitializer>();
+
+            services.AddTransient<IEmailSender, EmailSenderService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -66,6 +113,29 @@ namespace KnowledgeSpace.BackendServer
                     Version = "v1",
                     Title = "Implement Swagger UI",
                     Description = "A simple example to Implement Swagger UI",
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize"),
+                            Scopes = new Dictionary<string, string> { { "api.knowledgespace", "KnowledgeSpace API" } }
+                        },
+                    },
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new List<string>{ "api.knowledgespace" }
+                    }
                 });
             });
         }
@@ -78,6 +148,12 @@ namespace KnowledgeSpace.BackendServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
+            app.UseIdentityServer();
+
+            app.UseAuthentication();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -86,13 +162,15 @@ namespace KnowledgeSpace.BackendServer
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
 
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
+                c.OAuthClientId("swagger");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api V1");
             });
         }
