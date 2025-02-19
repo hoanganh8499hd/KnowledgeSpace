@@ -1,4 +1,5 @@
 ﻿using KnowledgeSpace.BackendServer.Authorization;
+using KnowledgeSpace.BackendServer.Helper;
 using KnowledgeSpace.Persistence.EF;
 using KnowledgeSpace.Persistence.Entities;
 using KnowledgeSpace.Shared.Constants;
@@ -103,11 +104,12 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpGet("{id}")]
         [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.VIEW)]
+        [ApiValidationFilter]
         public async Task<IActionResult> GetById(string id)
         {
             var function = await _context.Functions.FindAsync(id);
             if (function == null)
-                return NotFound();
+                return NotFound(new ApiNotFoundResponse($"Cannot found function with id {id}"));
 
             var functionVm = new FunctionVm()
             {
