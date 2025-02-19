@@ -9,6 +9,8 @@ using KnowledgeSpace.Shared.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,10 +19,12 @@ namespace KnowledgeSpace.BackendServer.Controllers
     public class FunctionsController : AuthorizeController
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<FunctionsController> _logger;
 
-        public FunctionsController(ApplicationDbContext context)
+        public FunctionsController(ApplicationDbContext context, ILogger<FunctionsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -56,6 +60,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.VIEW)]
         public async Task<IActionResult> GetFunctions()
         {
+            _logger.LogInformation("Begin GetFunctions API");
             var functions = _context.Functions;
 
             var functionvms = await functions.Select(u => new FunctionVm()
@@ -67,7 +72,9 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 ParentId = u.ParentId
             }).ToListAsync();
 
+            _logger.LogInformation("Begin GetFunctions API");
             return Ok(functionvms);
+
         }
 
         [HttpGet("filter")]
