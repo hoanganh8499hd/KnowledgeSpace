@@ -1,4 +1,6 @@
-﻿using KnowledgeSpace.Persistence.Entities;
+﻿using KnowledgeSpace.BackendServer.Authorization;
+using KnowledgeSpace.Persistence.Entities;
+using KnowledgeSpace.Shared.Constants;
 using KnowledgeSpace.Shared.Models.Paginations;
 using KnowledgeSpace.Shared.Models.Request;
 using KnowledgeSpace.Shared.Models.ViewModels;
@@ -15,6 +17,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         #region Comments
 
         [HttpGet("{knowledgeBaseId}/comments/filter")]
+        [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.VIEW)]
         public async Task<IActionResult> GetCommentsPaging(int knowledgeBaseId, string filter, int pageIndex, int pageSize)
         {
             var query = _context.Comments.Where(x => x.KnowledgeBaseId == knowledgeBaseId).AsQueryable();
@@ -45,6 +48,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpGet("{knowledgeBaseId}/comments/{commentId}")]
+        [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.VIEW)]
         public async Task<IActionResult> GetCommentDetail(int commentId)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -65,6 +69,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpPost("{knowledgeBaseId}/comments")]
+        [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.CREATE)]
         public async Task<IActionResult> PostComment(int knowledgeBaseId, [FromBody] CommentCreateRequest request)
         {
             var comment = new Comment()
@@ -93,6 +98,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpPut("{knowledgeBaseId}/comments/{commentId}")]
+        [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.UPDATE)]
         public async Task<IActionResult> PutComment(int commentId, [FromBody] CommentCreateRequest request)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -114,7 +120,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpDelete("{knowledgeBaseId}/comments/{commentId}")]
-        public async Task<IActionResult> DeleteComment(int knowledgeBaseId, int commentId)
+        [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.DELETE)]
+        public async Task<IActionResult> DeleteVote(int knowledgeBaseId, int commentId)
         {
             var comment = await _context.Comments.FindAsync(commentId);
             if (comment == null)
