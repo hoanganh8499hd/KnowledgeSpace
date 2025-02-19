@@ -1,54 +1,35 @@
-﻿using KnowledgeSpace.Shared.Contracts.Domains.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace KnowledgeSpace.Persistence.Entities
+namespace KnowledgeSpace.Shared.Models.ViewModels
 {
-    [Table("KnowledgeBases")]
-    public class KnowledgeBase : IDateTracking
+    public class KnowledgeBaseVm
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [Required]
-        [Range(1, Double.PositiveInfinity)]
         public int CategoryId { get; set; }
 
-        [MaxLength(500)]
-        [Required]
+        public string CategoryName { get; set; }
+
         public string Title { get; set; }
 
-        [MaxLength(500)]
-        [Required]
-        [Column(TypeName = "varchar(500)")]
         public string SeoAlias { get; set; }
 
-        [MaxLength(500)]
         public string Description { get; set; }
 
-        [MaxLength(500)]
         public string Environment { get; set; }
 
-        [MaxLength(500)]
         public string Problem { get; set; }
 
         public string StepToReproduce { get; set; }
 
-        [MaxLength(500)]
         public string ErrorMessage { get; set; }
 
-        [MaxLength(500)]
         public string Workaround { get; set; }
 
         public string Note { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        [Column(TypeName = "varchar(50)")]
         public string OwnerUserId { get; set; }
 
         public string Labels { get; set; }

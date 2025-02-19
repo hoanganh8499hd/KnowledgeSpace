@@ -10,9 +10,7 @@ namespace KnowledgeSpace.Persistence.Entities
     [Table("Reports")]
     public class Report : EntityBase<int>, IDateTracking
     {
-        public int? KnowledgeBaseId { get; set; }
-
-        public int? CommentId { get; set; }
+        public int KnowledgeBaseId { get; set; }
 
         [MaxLength(500)]
         public string Content { get; set; }
@@ -25,9 +23,5 @@ namespace KnowledgeSpace.Persistence.Entities
         public DateTime? LastModifiedDate { get; set; }
 
         public bool IsProcessed { get; set; }
-
-        [MaxLength(50)]
-        [Column(TypeName = "varchar(50)")]
-        public string Type { get; set; }
     }
 }
