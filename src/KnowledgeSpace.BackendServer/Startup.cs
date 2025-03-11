@@ -25,6 +25,8 @@ namespace KnowledgeSpace.BackendServer
 {
     public class Startup
     {
+        private readonly string KspSpecificOrigins = "KspSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -68,11 +70,22 @@ namespace KnowledgeSpace.BackendServer
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryApiResources(Config.Apis)
-            .AddInMemoryClients(Config.Clients)
+            .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
             .AddInMemoryIdentityResources(Config.Ids)
             .AddAspNetIdentity<User>()
             .AddProfileService<IdentityProfileService>()
             .AddDeveloperSigningCredential();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(KspSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins(Configuration["AllowOrigins"])
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
 
             services.Configure<ApiBehaviorOptions>(options =>
@@ -155,10 +168,7 @@ namespace KnowledgeSpace.BackendServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseDeveloperExceptionPage();
 
             app.UseErrorWrapping();
 
@@ -173,6 +183,8 @@ namespace KnowledgeSpace.BackendServer
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(KspSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {

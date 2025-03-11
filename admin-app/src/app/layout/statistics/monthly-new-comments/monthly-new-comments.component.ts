@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-monthly-new-comments',
-  standalone: true,
-  imports: [],
   templateUrl: './monthly-new-comments.component.html',
-  styleUrl: './monthly-new-comments.component.css'
+  styleUrls: ['./monthly-new-comments.component.css']
 })
-export class MonthlyNewCommentsComponent {
+export class MonthlyNewCommentsComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }

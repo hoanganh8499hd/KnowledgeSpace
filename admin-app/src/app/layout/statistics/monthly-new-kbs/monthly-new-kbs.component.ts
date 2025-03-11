@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-monthly-new-kbs',
-  standalone: true,
-  imports: [],
   templateUrl: './monthly-new-kbs.component.html',
-  styleUrl: './monthly-new-kbs.component.css'
+  styleUrls: ['./monthly-new-kbs.component.css']
 })
-export class MonthlyNewKbsComponent {
+export class MonthlyNewKbsComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }

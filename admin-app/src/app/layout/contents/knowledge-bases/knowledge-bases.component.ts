@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-knowledge-bases',
-  standalone: true,
-  imports: [],
   templateUrl: './knowledge-bases.component.html',
-  styleUrl: './knowledge-bases.component.css'
+  styleUrls: ['./knowledge-bases.component.css']
 })
-export class KnowledgeBasesComponent {
+export class KnowledgeBasesComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }
